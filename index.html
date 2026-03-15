@@ -43,7 +43,6 @@ box-shadow:0 0 10px rgba(255,90,150,0.5);
 transform:scale(1.1);
 }
 
-/* 初始飘落动画 */
 .flower{
 position:absolute;
 top:-50px;
@@ -59,70 +58,77 @@ animation:fall linear forwards;
 @keyframes fall{
 to{transform:translateY(105vh);opacity:0;}
 }
-
-/* 成功页样式 */
-.success-page body{
-background: linear-gradient(to top, #ff9bbb, #ffc3d9);
-}
-.box{
-background:white;
-padding:40px 30px;
-border-radius:30px;
-text-align:center;
-box-shadow:0 15px 30px rgba(0,0,0,0.15);
-max-width:90vw;
-max-height:90vh;
-overflow-y:auto;
-}
-.title{
-font-size:42px;
-color:#ff3366;
-font-weight:bold;
-margin-bottom:20px;
-}
-.btn-real{
-margin-top:20px;
-padding:10px 25px;
-background:#ff6699;
-color:white;
-border:none;
-border-radius:20px;
-font-size:18px;
-cursor:pointer;
-}
-.love-text{
-margin-top:25px;
-font-size:20px;
-color:#ff5e97;
-display:none;
-line-height:1.6;
-text-align:left;
-white-space: pre-line;
-}
-.fall{
-position:absolute;
-top:-60px;
-z-index:1;
-animation: fallSlow linear forwards;
-}
-@keyframes fallSlow{
-0%{transform:translateY(0) rotate(0deg);opacity:1;}
-100%{transform:translateY(105vh) rotate(360deg);opacity:0;}
-}
 </style>
 </head>
-<body class="main-page">
-<div id="main-content">
-  <h1>我喜欢你，做我对象好不好？</h1>
-  <div>
-    <button class="btn" id="yes">好呀</button>
-    <button class="btn" id="no">不要</button>
-  </div>
+<body>
+<h1>我喜欢你，做我对象好不好？</h1>
+<div>
+<button class="btn" id="yes">好呀</button>
+<button class="btn" id="no">不要</button>
 </div>
 
-<div id="success-content" style="display:none;">
+<script>
+let flowerTimer, heartTimer;
+
+const yes = document.getElementById('yes');
+yes.onclick = function(){
+  clearInterval(flowerTimer);
+  clearInterval(heartTimer);
+  document.querySelectorAll('.flower,.heart').forEach(item => item.remove());
+
+  document.body.innerHTML = `
+  <style>
+    body{
+      background: linear-gradient(to top, #ff9bbb, #ffc3d9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height:100vh;
+      overflow:hidden;
+    }
+    .box{
+      background:white;
+      padding:40px 30px;
+      border-radius:30px;
+      text-align:center;
+      box-shadow:0 15px 30px rgba(0,0,0,0.15);
+      max-width:90vw;
+      max-height:90vh;
+      overflow-y:auto;
+    }
+    .heart{
+      font-size:70px;
+      margin-bottom:20px;
+    }
+    .title{
+      font-size:42px;
+      color:#ff3366;
+      font-weight:bold;
+      margin-bottom:20px;
+    }
+    .btn-real{
+      margin-top:20px;
+      padding:10px 25px;
+      background:#ff6699;
+      color:white;
+      border:none;
+      border-radius:20px;
+      font-size:18px;
+      cursor:pointer;
+    }
+    .love-text{
+      margin-top:25px;
+      font-size:20px;
+      color:#ff5e97;
+      display:none;
+      line-height:1.6;
+      text-align:left;
+      white-space: pre-line;
+    }
+  </style>
+
   <div class="box">
-    <div class="title">我也超级喜欢你</div>
+    <div class="title">❤️</div>
     <button class="btn-real" id="realBtn">真的吗？</button>
     <div class="love-text" id="loveText">
 遇见你之前，我从没想过会有人让我如此心动，遇见你之后，我只想牵着你的手走完余生。
@@ -135,12 +141,57 @@ animation: fallSlow linear forwards;
 爱你
     </div>
   </div>
-</div>
+  `;
 
-<script>
-let flowerTimer, heartTimer;
+  // 爱心花瓣飘落
+  setInterval(()=>{
+    let h = document.createElement('div');
+    h.className='fall';
+    h.innerHTML='❤️';
+    h.style.position='absolute';
+    h.style.top='-60px';
+    h.style.left=Math.random()*100+'vw';
+    h.style.fontSize='20px';
+    h.style.zIndex='1';
+    h.style.animation='fallSlow 6s linear forwards';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),8000);
+  },220);
 
-// 初始飘落动画
+  setInterval(()=>{
+    let f = document.createElement('div');
+    f.className='fall';
+    f.innerHTML='🌸';
+    f.style.position='absolute';
+    f.style.top='-60px';
+    f.style.left=Math.random()*100+'vw';
+    f.style.fontSize='18px';
+    f.style.zIndex='1';
+    f.style.animation='fallSlow 7s linear forwards';
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),9000);
+  },320);
+
+  let s = document.createElement('style');
+  s.innerHTML=`@keyframes fallSlow{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(105vh) rotate(360deg);opacity:0;}}`;
+  document.head.appendChild(s);
+
+  // 点真的吗 → 按钮消失 + 显示文字
+  setTimeout(()=>{
+    document.getElementById('realBtn').onclick=function(){
+      this.style.display = 'none';
+      document.getElementById('loveText').style.display='block';
+    }
+  },100);
+}
+
+const no = document.getElementById('no');
+no.onclick = function(){
+  no.style.position='absolute';
+  no.style.left=Math.random()*(window.innerWidth-100)+'px';
+  no.style.top=Math.random()*(window.innerHeight-50)+'px';
+}
+
 function createFlower(){
   let flower = document.createElement('div');
   flower.innerHTML = '🌸';
@@ -164,60 +215,6 @@ function createHeart(){
   setTimeout(()=>heart.remove(),6000);
 }
 heartTimer = setInterval(createHeart,200);
-
-// 点「好呀」切换到成功页
-document.getElementById('yes').onclick = function(){
-  clearInterval(flowerTimer);
-  clearInterval(heartTimer);
-  document.querySelectorAll('.flower,.heart').forEach(item => item.remove());
-  
-  document.getElementById('main-content').style.display = 'none';
-  document.getElementById('success-content').style.display = 'flex';
-  document.body.style.justifyContent = 'center';
-  document.body.style.background = 'linear-gradient(to top, #ff9bbb, #ffc3d9)';
-
-  // 成功页飘落动画
-  setInterval(()=>{
-    let h = document.createElement('div');
-    h.className='fall';
-    h.innerHTML='❤️';
-    h.style.position='absolute';
-    h.style.top='-60px';
-    h.style.left=Math.random()*100+'vw';
-    h.style.fontSize='20px';
-    h.style.zIndex='1';
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),8000);
-  },220);
-
-  setInterval(()=>{
-    let f = document.createElement('div');
-    f.className='fall';
-    f.innerHTML='🌸';
-    f.style.position='absolute';
-    f.style.top='-60px';
-    f.style.left=Math.random()*100+'vw';
-    f.style.fontSize='18px';
-    f.style.zIndex='1';
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),9000);
-  },320);
-
-  // 点「真的吗」按钮消失 + 显示文字
-  setTimeout(()=>{
-    document.getElementById('realBtn').onclick=function(){
-      this.style.display = 'none';
-      document.getElementById('loveText').style.display='block';
-    }
-  },100);
-}
-
-// 点「不要」乱跑
-document.getElementById('no').onclick = function(){
-  this.style.position='absolute';
-  this.style.left=Math.random()*(window.innerWidth-100)+'px';
-  this.style.top=Math.random()*(window.innerHeight-50)+'px';
-};
 </script>
 </body>
 </html>
