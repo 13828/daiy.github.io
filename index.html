@@ -1,220 +1,80 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<title>表白</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>今日宜</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
-body{
-background:#ffeff5;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-font-family:"微软雅黑";
-overflow:hidden;
-}
-h1{
-font-size:40px;
-color:#ff5e97;
-margin-bottom:25px;
-}
-.btn{
-padding:6px 16px;
-font-size:15px;
-border:none;
-border-radius:18px;
-background:#ff5e97;
-color:#fff;
-cursor:pointer;
-margin:6px;
-transition:0.2s;
-}
-#yes{
-background:linear-gradient(90deg,#ff66a1,#ff3377);
-box-shadow:0 0 10px rgba(255,90,150,0.5);
-}
-.btn:hover{
-transform:scale(1.1);
-}
-
-.flower{
-position:absolute;
-top:-50px;
-z-index:-1;
-animation:fall linear forwards;
-}
-.heart{
-position:absolute;
-top:-50px;
-z-index:-1;
-animation:fall linear forwards;
-}
-@keyframes fall{
-to{transform:translateY(105vh);opacity:0;}
-}
+:root{--red:#d4301f;--ink:#23201d;--paper:#fbf8f1;--gold:#c79a3b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:radial-gradient(120% 80% at 50% 20%,#34574f,#1f372f);font-family:"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;-webkit-tap-highlight-color:transparent}
+.grain{position:fixed;inset:0;pointer-events:none;opacity:.1;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+.nail{position:relative;z-index:100;width:14px;height:14px;margin-bottom:-8px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ece6d8,#6f6a60);box-shadow:0 3px 4px rgba(0,0,0,.5)}
+#cal{position:relative;height:min(66vh,470px);aspect-ratio:1/1.42;max-width:88vw;border-radius:5px;cursor:pointer;box-shadow:0 2px 0 #e7dfcc,0 4px 0 #cfc5ad,0 6px 0 #e7dfcc,0 8px 0 #bdb299,0 26px 40px rgba(0,0,0,.5)}
+.pg{position:absolute;inset:0;display:flex;flex-direction:column;overflow:hidden;background:var(--paper);border-radius:5px;transform-origin:14% 0}
+.hd{position:relative;flex:none;height:50px;padding-top:12px;display:flex;align-items:center;justify-content:center;background:var(--red);color:var(--paper);font:600 15px/1 "Songti SC","Noto Serif SC",serif;letter-spacing:.45em;text-indent:.45em}
+.hd::before{content:"";position:absolute;top:6px;left:0;right:0;height:8px;background:radial-gradient(circle,#26433d 0 3px,transparent 3.6px) 0 0/22px 8px repeat-x}
+.big{flex:1;display:grid;place-items:center;text-align:center;font:900 clamp(120px,40vw,170px)/1 "Songti SC","Noto Serif SC","Source Han Serif SC",STSong,serif;color:var(--red)}
+.big.fin{font-size:clamp(64px,22vw,88px);line-height:1.12;letter-spacing:.08em;text-indent:.08em}
+.yj{flex:none;padding:0 22px 24px;font-size:16px;line-height:1.9;color:var(--ink)}
+.yj p{display:flex;gap:10px;align-items:baseline}
+.yj b{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:14px;color:#fff;transform:translateY(3px)}
+.y{background:var(--red)}.k{background:var(--ink)}
+.yj p.note{display:block;margin-top:10px;padding-right:62px;font-size:13px;line-height:1.7;color:#6f675a}
+.last::after{content:"";position:absolute;left:8px;right:8px;top:58px;bottom:8px;border:1px solid var(--gold);border-radius:2px;pointer-events:none}
+.seal{position:absolute;right:20px;bottom:22px;width:46px;height:62px;display:grid;place-items:center;border:3px solid var(--red);color:var(--red);font:900 22px/1.1 "Songti SC","Noto Serif SC",serif;writing-mode:vertical-rl;letter-spacing:.1em;mix-blend-mode:multiply;opacity:0}
+.live .seal{animation:stamp .45s 1s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes stamp{0%{opacity:0;transform:scale(2.4) rotate(-20deg)}60%{opacity:.95;transform:scale(.94) rotate(-8deg)}100%{opacity:.9;transform:scale(1) rotate(-8deg)}}
+.tear{pointer-events:none;animation:tear .8s cubic-bezier(.5,0,.8,.4) forwards}
+@keyframes tear{0%{transform:none}18%{transform:rotate(3deg) translateY(-8px)}100%{transform:translate(-70px,130%) rotate(-28deg);opacity:0}}
+.btn{margin-top:30px;font:15px/1 inherit;font-family:inherit;letter-spacing:.3em;text-indent:.3em;color:#ece6d8;background:transparent;border:1px solid rgba(236,230,216,.5);border-radius:999px;padding:13px 30px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+@keyframes fade{to{opacity:0}}
+@media (prefers-reduced-motion:reduce){.tear{animation:fade .3s forwards}.live .seal{animation:none;opacity:.9;transform:rotate(-8deg)}}
 </style>
 </head>
 <body>
-<h1>我喜欢你，做我对象好不好？</h1>
-<div>
-<button class="btn" id="yes">好呀</button>
-<button class="btn" id="no">不要</button>
-</div>
+<div class="grain"></div>
+<div class="nail"></div>
+<div id="cal"></div>
+<button class="btn" id="btn">撕下一页</button>
 
 <script>
-let flowerTimer, heartTimer;
+// 改这里：TO 是她的名字（留空则称“你”），FROM 是你的署名（留空则写“朋友”）
+const TO = "", FROM = "";
 
-const yes = document.getElementById('yes');
-yes.onclick = function(){
-  clearInterval(flowerTimer);
-  clearInterval(heartTimer);
-  document.querySelectorAll('.flower,.heart').forEach(item => item.remove());
+const D = [
+  ["又", "多睡十分钟", "假装自己不累"],
+  ["长", "吃点好的", "对自己苛刻"],
+  ["一", "想起老朋友", "深夜反思人生"],
+  ["岁", "许愿，别太谦虚", "说“随便”"]
+];
+const cal = document.getElementById('cal'), btn = document.getElementById('btn');
+cal.innerHTML = D.map(([c, y, k]) =>
+  `<div class="pg"><div class="hd">寻常日</div><div class="big">${c}</div><div class="yj"><p><b class="y">宜</b>${y}</p><p><b class="k">忌</b>${k}</p></div></div>`
+).join('') +
+  `<div class="pg last"><div class="hd">${TO || '你'}的特别日</div><div class="big fin">生日<br>快乐</div><div class="yj"><p><b class="y">宜</b>收礼物，吃蛋糕，被人惦记</p><p><b class="k">忌</b>加班，谦虚，说“我没事”</p><p class="note">此页经${FROM || '朋友'}特批，全天有效。</p></div><div class="seal">大吉</div></div>`;
 
-  document.body.innerHTML = `
-  <style>
-    body{
-      background: linear-gradient(to top, #ff9bbb, #ffc3d9);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height:100vh;
-      overflow:hidden;
-    }
-    .box{
-      background:white;
-      padding:40px 30px;
-      border-radius:30px;
-      text-align:center;
-      box-shadow:0 15px 30px rgba(0,0,0,0.15);
-      max-width:90vw;
-      max-height:90vh;
-      overflow-y:auto;
-    }
-    .heart{
-      font-size:70px;
-      margin-bottom:20px;
-    }
-    .title{
-      font-size:42px;
-      color:#ff3366;
-      font-weight:bold;
-      margin-bottom:20px;
-    }
-    .btn-real{
-      margin-top:20px;
-      padding:10px 25px;
-      background:#ff6699;
-      color:white;
-      border:none;
-      border-radius:20px;
-      font-size:18px;
-      cursor:pointer;
-    }
-    .love-text{
-      margin-top:25px;
-      font-size:20px;
-      color:#ff5e97;
-      display:none;
-      line-height:1.6;
-      text-align:left;
-      white-space: pre-line;
-    }
-  </style>
+const pg = [...cal.children];
+pg.forEach((p, j) => p.style.zIndex = pg.length - j);
+let n = 0, busy = false;
 
-  <div class="box">
-    <div class="title">❤️</div>
-    <button class="btn-real" id="realBtn">真的吗？</button>
-    <div class="love-text" id="loveText">
-遇见你之前，我从没想过会有人让我如此心动，遇见你之后，我只想牵着你的手走完余生。
-你是我清晨的第一缕阳光，也是我夜晚最温柔的梦。
-我想申请做你生命里的常驻居民，房租就用我的笑容和关心来付。
-因为听说喜欢一个人会让智商下降，可我愿意为你降到负数。
-而且这份喜欢不是一时冲动，是每天见到你都会更确定一次。
-所以我不想只做朋友，我想参与你未来的每一个故事。
-
-爱你
-    </div>
-  </div>
-  `;
-
-  // 爱心花瓣飘落
-  setInterval(()=>{
-    let h = document.createElement('div');
-    h.className='fall';
-    h.innerHTML='❤️';
-    h.style.position='absolute';
-    h.style.top='-60px';
-    h.style.left=Math.random()*100+'vw';
-    h.style.fontSize='20px';
-    h.style.zIndex='1';
-    h.style.animation='fallSlow 6s linear forwards';
-    document.body.appendChild(h);
-    setTimeout(()=>h.remove(),8000);
-  },220);
-
-  setInterval(()=>{
-    let f = document.createElement('div');
-    f.className='fall';
-    f.innerHTML='🌸';
-    f.style.position='absolute';
-    f.style.top='-60px';
-    f.style.left=Math.random()*100+'vw';
-    f.style.fontSize='18px';
-    f.style.zIndex='1';
-    f.style.animation='fallSlow 7s linear forwards';
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),9000);
-  },320);
-
-  let s = document.createElement('style');
-  s.innerHTML=`@keyframes fallSlow{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(105vh) rotate(360deg);opacity:0;}}`;
-  document.head.appendChild(s);
-
-  // 点真的吗 → 按钮消失 + 显示文字
-  setTimeout(()=>{
-    document.getElementById('realBtn').onclick=function(){
-      this.style.display = 'none';
-      document.getElementById('loveText').style.display='block';
-    }
-  },100);
+function act(){
+  if (busy) return;
+  if (n === pg.length - 1){ reset(); return; }
+  busy = true;
+  pg[n].classList.add('tear'); n++;
+  if (n === pg.length - 1) pg[n].classList.add('live');
+  btn.textContent = n === pg.length - 1 ? '贴回去，再看一遍' : '撕下一页';
+  setTimeout(() => busy = false, 700);
 }
-
-const no = document.getElementById('no');
-no.onclick = function(){
-  no.style.position='absolute';
-  no.style.left=Math.random()*(window.innerWidth-100)+'px';
-  no.style.top=Math.random()*(window.innerHeight-50)+'px';
+function reset(){
+  pg.forEach(p => p.classList.remove('tear', 'live'));
+  n = 0; btn.textContent = '撕下一页';
 }
-
-function createFlower(){
-  let flower = document.createElement('div');
-  flower.innerHTML = '🌸';
-  flower.className = 'flower';
-  flower.style.left = Math.random()*100+'vw';
-  flower.style.fontSize=Math.random()*15+10+'px';
-  flower.style.animationDuration=Math.random()*3+4+'s';
-  document.body.appendChild(flower);
-  setTimeout(()=>flower.remove(),7000);
-}
-flowerTimer = setInterval(createFlower,300);
-
-function createHeart(){
-  let heart = document.createElement('div');
-  heart.innerHTML = '❤️';
-  heart.className = 'heart';
-  heart.style.left = Math.random()*100+'vw';
-  heart.style.fontSize=Math.random()*18+12+'px';
-  heart.style.animationDuration=Math.random()*3+4+'s';
-  document.body.appendChild(heart);
-  setTimeout(()=>heart.remove(),6000);
-}
-heartTimer = setInterval(createHeart,200);
+btn.onclick = act;
+cal.onclick = () => { if (n < pg.length - 1) act(); };
 </script>
 </body>
 </html>
